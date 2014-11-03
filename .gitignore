@@ -1,3 +1,4 @@
 *.png
-*.sh~
-*.gp~
+*~
+.DS_Store
+*.swp
