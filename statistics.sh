@@ -74,4 +74,4 @@ done
 
 echo "$iteration 0 0 0 0 0 0 0" # Last iteration means no chromium process
 
-return $?
+exit $?
