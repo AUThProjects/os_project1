@@ -9,9 +9,9 @@ done < CTP_initialPids;
 # Opening tabs
 while read page; do
 	chromium-browser $page &
-	sleep 2s
+	sleep 5s
 done < url.in
-sleep 5s
+sleep 30s
 
 # Closing tabs in reverse start time
 ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > CTP_sortedPids
