@@ -38,6 +38,7 @@ do
     then
         echo "defunct"
         sed -i '1d' CTP_sortedPids
+	continue
     fi
     kill -s SIGKILL `head -n1 CTP_sortedPids`
     export last_pid=`head -n1 CTP_sortedPids`
