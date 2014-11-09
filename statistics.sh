@@ -8,6 +8,14 @@ if [ -e statsRec.txt ]; then
 fi
 
 export flag="`wc -l GS_sortedPids | awk '{ print $1 }'`"
+
+while [ $flag -eq 0 ] 
+do
+	sleep 1s
+	ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > GS_sortedPids
+	export flag="`wc -l GS_sortedPids | awk '{ print $1 }'`"
+done
+
 export iteration=0
 
 while [ $flag -ne 0 ] 
