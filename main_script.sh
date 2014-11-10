@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Main script spawning secondary jobs
 

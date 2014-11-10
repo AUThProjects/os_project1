@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Initializing part
 ps xao pid,ppid,pgid,sid,comm | grep chromium | awk '{print $1}' > CTP_initialPids;

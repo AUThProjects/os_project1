@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Get initial PIDs
 ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > GS_sortedPids
