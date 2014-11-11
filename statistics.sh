@@ -28,8 +28,8 @@ do
 	export sum_nvcs=0 #Non-voluntary Context Switches
 	export proc_count=$flag
 
+    # Ensure that the PIDs in the list are indeed present in the /proc directory
     export access_all_pids_flag=0
-
     while [ $access_all_pids_flag -eq 0 ];do
         ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > GS_sortedPids
 
@@ -42,6 +42,14 @@ do
     done
 	
 	while read pid; do
+        # Special handle if the pid has changed from chromium process management
+        # We cannot find the pid.
+        if [ ! -e /proc/$pid ];then
+            echo "Does not exist"
+            ((proc_count--))
+            continue
+        fi
+
 		# Thread count
 		threads="`cat "/proc/$pid/status" | grep -i "threads" | awk '{ print $2 }'`"
 		((sum_threads+=threads))
@@ -50,7 +58,7 @@ do
 		fi
 		
         state="`cat "/proc/$pid/status" | grep -i "state" | awk '{ print $2 }'`"
-        if [ state != "Z" ];then
+        if [ "$state" != "Z" ];then # zombie processes have no RSS field
 		    # Memory count
 		    RSS="`cat "/proc/$pid/status" | grep -i "vmrss" | awk '{ print $2 }'`"
 		    ((sum_RSS+=RSS))
@@ -84,7 +92,7 @@ do
 	fi
 	
 	# Append result in line
-	echo "$time $proc_count $max_threads $avg_threads $sum_RSS_mb $max_RSS_mb $avg_vcs $avg_nvcs" >> statsRec.txt
+	echo "$time $flag $max_threads $avg_threads $sum_RSS_mb $max_RSS_mb $avg_vcs $avg_nvcs" >> statsRec.txt
 
 	# Rescan for chromium processes
 	ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > GS_sortedPids
