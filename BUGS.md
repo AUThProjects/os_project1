@@ -1,6 +1,14 @@
 BUGS
 ====
 
-1. script.sh ends abnormally SOLVED
-2. [maybe] Reload list with chromium processes each time one process is killed. SOLVED
-3. Duplicate files (with chromium processes)
+List of chromium PIDs cannot be refreshed at the same rate the Chromium process manager changes the PIDs of its processes.
+
+### Handling:
+
+* Ensure that the list we are iterating over has the relevant pid directories under /proc
+* If a pid is absent under /proc, we do not account it inside the statistics
+
+### Potential solutions
+
+* Instructions towards the Chromium browser about its process handling
+* Chromium logs as a source of statistics
