@@ -27,6 +27,19 @@ do
 	export sum_vcs=0 # Voluntary Context Switches
 	export sum_nvcs=0 #Non-voluntary Context Switches
 	export proc_count=$flag
+
+    export access_all_pids_flag=0
+
+    while [ $access_all_pids_flag -eq 0 ];do
+        ps kstart_time -ef | grep [c]hromium | awk '{print $2}' | tac > GS_sortedPids
+
+        export access_all_pids_flag=1
+        while read pid;do
+            if [ ! -e /proc/$pid ];then
+                export access_all_pids_flag=0
+            fi
+        done <  GS_sortedPids
+    done
 	
 	while read pid; do
 		# Thread count
@@ -36,13 +49,15 @@ do
 			export max_threads=$threads
 		fi
 		
-		# Memory count
-		RSS="`cat "/proc/$pid/status" | grep -i "vmrss" | awk '{ print $2 }'`"
-		((sum_RSS+=RSS))
-		if [ $RSS -gt $max_RSS ]; then
-			export max_RSS=$RSS
-		fi
-
+        state="`cat "/proc/$pid/status" | grep -i "state" | awk '{ print $2 }'`"
+        if [ state != "Z" ];then
+		    # Memory count
+		    RSS="`cat "/proc/$pid/status" | grep -i "vmrss" | awk '{ print $2 }'`"
+		    ((sum_RSS+=RSS))
+		    if [ $RSS -gt $max_RSS ]; then
+			    export max_RSS=$RSS
+		    fi
+        fi
 		# Context Switching count
 		vcs="`cat "/proc/$pid/status" | grep -ie "^voluntary" | awk '{ print $2 }'`"
 		((sum_vcs+=vcs))
