@@ -10,7 +10,7 @@ done < CTP_initialPids;
 while read page; do
 	chromium-browser $page &
 	sleep 5s
-done < url.in
+done < ../input/url.in
 sleep 30s
 
 # Closing tabs in reverse start time

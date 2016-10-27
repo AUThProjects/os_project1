@@ -6,8 +6,6 @@
 ./statistics.sh # Gather statistics
 
 # Draw plots according to statistics.sh output
-if [ -e statsRec.txt ]; then
+if [ -e ../input/statsRec.txt ]; then
 	gnuplot plot_processCount.gp
 fi
-
-
